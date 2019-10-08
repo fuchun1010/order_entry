@@ -1,0 +1,14 @@
+server:
+  port: 20000
+  ip: 0.0.0.0
+
+
+logging:
+  level:
+    org:
+      springframework:
+        web:
+          servlet:
+            mvc:
+              method:
+                annotation: TRACE
