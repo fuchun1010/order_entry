@@ -9,4 +9,6 @@ public interface Constants {
 
   String ORDER_CREATED = "/order/created";
 
+  String ORDER_QUERY_BY_OrderNo = "/{orderNo}/order";
+
 }
