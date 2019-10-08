@@ -1,7 +1,8 @@
 server:
   port: 20000
   ip: 0.0.0.0
-
+  max-threads: 300
+  max-connections: 600
 
 logging:
   level:

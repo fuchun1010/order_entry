@@ -8,7 +8,7 @@ import java.lang.annotation.Target;
 /**
  * @author tank198435163.com
  */
-@Target({ElementType.TYPE, ElementType.METHOD})
+@Target({ElementType.TYPE, ElementType.METHOD, ElementType.FIELD})
 @Retention(RetentionPolicy.SOURCE)
 public @interface Comment {
 

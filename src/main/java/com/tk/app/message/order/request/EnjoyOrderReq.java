@@ -1,4 +1,4 @@
-package com.tk.app.message.request;
+package com.tk.app.message.order.request;
 
 import com.tk.app.common.Comment;
 import com.tk.app.message.OrderReq;

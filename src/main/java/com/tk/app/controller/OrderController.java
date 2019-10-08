@@ -3,13 +3,13 @@ package com.tk.app.controller;
 import com.tk.app.common.Comment;
 import com.tk.app.common.ResponseBody;
 import com.tk.app.message.OrderReq;
-import com.tk.app.message.response.CreatedOrderRes;
+import com.tk.app.message.order.response.CreatedOrderRes;
 import lombok.NonNull;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import static com.tk.app.common.Constants.*;
+import static com.tk.app.common.UrlPattern.*;
 
 /**
  * @author tank198435163.com

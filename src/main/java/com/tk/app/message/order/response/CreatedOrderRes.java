@@ -1,4 +1,4 @@
-package com.tk.app.message.response;
+package com.tk.app.message.order.response;
 
 import com.tk.app.common.Comment;
 import lombok.Data;
