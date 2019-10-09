@@ -1,6 +1,8 @@
 package com.tk.app.message.item;
 
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import java.util.Objects;
 
@@ -8,6 +10,8 @@ import java.util.Objects;
  * @author tank198435163.com
  */
 @Data
+@AllArgsConstructor
+@NoArgsConstructor
 public class ItemReq {
 
   @Override

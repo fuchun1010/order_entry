@@ -5,6 +5,6 @@ package com.tk.app.common;
  */
 public interface Constants {
 
-
+  String EMPTY_STR = "-";
 
 }
