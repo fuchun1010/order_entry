@@ -10,15 +10,6 @@ import java.util.Objects;
 @Data
 public class ItemReq {
 
-  private String itemCode;
-
-  private String itemName;
-
-  private Double quality;
-
-  private Double unitPrice;
-
-
   @Override
   public boolean equals(Object o) {
     if (this == o) {
@@ -35,4 +26,12 @@ public class ItemReq {
   public int hashCode() {
     return Objects.hash(getItemCode());
   }
+
+  private String itemCode;
+
+  private String itemName;
+
+  private Double quality;
+
+  private Double unitPrice;
 }

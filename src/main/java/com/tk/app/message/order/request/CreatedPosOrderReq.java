@@ -11,7 +11,7 @@ import lombok.EqualsAndHashCode;
 @Data
 @Comment(desc = "pos机下单请求")
 @EqualsAndHashCode(callSuper = false)
-public class PosOrderReq extends OrderReq {
+public class CreatedPosOrderReq extends OrderReq {
 
   @Comment(desc = "门店编号")
   private String storeCode;
