@@ -13,3 +13,6 @@ logging:
             mvc:
               method:
                 annotation: TRACE
+
+orderDomain:
+  maxAllowedTimeConsume: 500
