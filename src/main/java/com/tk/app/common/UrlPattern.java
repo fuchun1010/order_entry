@@ -10,4 +10,6 @@ public interface UrlPattern {
   String ORDER_CREATED = "/order/created";
 
   String ORDER_QUERY_BY_OrderNo = "/{orderNo}/order";
+
+  String MOCK_EXP = "/order/exp";
 }

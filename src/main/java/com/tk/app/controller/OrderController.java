@@ -37,5 +37,9 @@ public class OrderController {
     return ResponseEntity.ok(responseBody);
   }
 
-
+  @Comment(desc = "模拟测试")
+  @GetMapping(path = MOCK_EXP)
+  public ResponseEntity<ResponseBody> mockExp() throws Exception {
+    throw new Exception("exp");
+  }
 }
