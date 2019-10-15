@@ -1,18 +1,22 @@
 package com.tk.app.common.interceptor;
 
+import com.tk.app.common.Constants;
 import lombok.NonNull;
 import lombok.extern.slf4j.Slf4j;
 import lombok.val;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
+import org.aspectj.lang.reflect.MethodSignature;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.env.Environment;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
 
+import java.lang.annotation.Annotation;
 import java.time.Duration;
 import java.time.Instant;
+import java.util.Optional;
 
 /**
  * @author tank198435163.com
@@ -33,6 +37,25 @@ public class CostInterceptor {
       end = Instant.now();
     }
     val signature = joinPoint.getSignature();
+    MethodSignature methodSignature = ((MethodSignature) joinPoint.getSignature());
+    for (Annotation annotation : methodSignature.getMethod().getAnnotations()) {
+      //TODO test more case
+      String annotationName = annotation.annotationType().getSimpleName();
+      if ("comment".equalsIgnoreCase(annotationName)) {
+
+        String result = Optional.ofNullable(annotation.annotationType().getDeclaredMethod("desc"))
+            .flatMap(method -> {
+              try {
+                return Optional.ofNullable((String) method.invoke(annotation, null));
+              } catch (Exception e) {
+                return Optional.ofNullable(Constants.EMPTY_STR);
+              }
+            })
+            .filter(r -> !r.equalsIgnoreCase(Constants.EMPTY_STR))
+            .orElse(Constants.EMPTY_STR);
+        System.out.println(result);
+      }
+    }
     val controllerName = signature.getDeclaringType().getName();
     val method = joinPoint.getSignature().getName();
     long costTime = Duration.between(start, end).toMillis();

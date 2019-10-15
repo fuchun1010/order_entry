@@ -42,4 +42,12 @@ public class OrderController {
   public ResponseEntity<ResponseBody> mockExp() throws Exception {
     throw new Exception("exp");
   }
+
+  @Comment(desc = "welcome")
+  @GetMapping(path = WELCOME)
+  public ResponseEntity<ResponseBody> welcome() {
+    ResponseBody responseBody = new ResponseBody();
+    responseBody.add("desc", "welcome to Order entry");
+    return ResponseEntity.ok(responseBody);
+  }
 }

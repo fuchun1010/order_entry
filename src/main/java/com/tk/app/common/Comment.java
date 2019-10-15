@@ -9,7 +9,7 @@ import java.lang.annotation.Target;
  * @author tank198435163.com
  */
 @Target({ElementType.TYPE, ElementType.METHOD, ElementType.FIELD})
-@Retention(RetentionPolicy.SOURCE)
+@Retention(RetentionPolicy.RUNTIME)
 public @interface Comment {
 
   String desc() default "";
