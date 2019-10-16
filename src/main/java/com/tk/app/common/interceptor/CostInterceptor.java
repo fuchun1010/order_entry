@@ -26,7 +26,8 @@ import java.util.Optional;
 @Component
 public class CostInterceptor {
 
-  @Around("execution(public * com.tk.app.controller.**.**(..))")
+  @SuppressWarnings("unchecked")
+  @Around(InterceptorRule.CONTROLLER_INTERCEPTOR_RULE)
   public <T> ResponseEntity<T> calculateCost(@NonNull final ProceedingJoinPoint joinPoint) throws Throwable {
     val start = Instant.now();
     Instant end = null;
