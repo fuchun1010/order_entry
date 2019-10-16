@@ -1,8 +1,12 @@
 package com.tk.app.controller;
 
 import com.tk.app.common.Comment;
+import com.tk.app.common.Constants;
 import com.tk.app.common.ResponseBody;
+import com.tk.app.common.holder.DbHolder;
+import com.tk.app.common.interceptor.DbSelector;
 import com.tk.app.message.OrderReq;
+import com.tk.app.message.mock.MockOrder;
 import com.tk.app.message.order.response.CreatedOrderRes;
 import lombok.NonNull;
 import lombok.extern.slf4j.Slf4j;
@@ -48,6 +52,18 @@ public class OrderController {
   public ResponseEntity<ResponseBody> welcome() {
     ResponseBody responseBody = new ResponseBody();
     responseBody.add("desc", "welcome to Order entry");
+    return ResponseEntity.ok(responseBody);
+  }
+
+  @Comment(desc = "mock test aop select db and mapped table with orderId")
+  @PostMapping(path = MOCK_ORDER_CREATED)
+  @DbSelector
+  public ResponseEntity<ResponseBody> pushOrder(@RequestBody @NonNull final MockOrder mockOrder) {
+    final String dbName = DbHolder.fetchSelectedDb().orElse(Constants.EMPTY_STR);
+    final String tableName = DbHolder.fetchSelectedTable().orElse(Constants.EMPTY_STR);
+    ResponseBody responseBody = new ResponseBody();
+    responseBody.add("db", dbName);
+    responseBody.add("tableName", tableName);
     return ResponseEntity.ok(responseBody);
   }
 }

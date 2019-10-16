@@ -43,7 +43,6 @@ public class CostInterceptor {
       //TODO test more case
       String annotationName = annotation.annotationType().getSimpleName();
       if ("comment".equalsIgnoreCase(annotationName)) {
-
         String result = Optional.ofNullable(annotation.annotationType().getDeclaredMethod("desc"))
             .flatMap(method -> {
               try {
