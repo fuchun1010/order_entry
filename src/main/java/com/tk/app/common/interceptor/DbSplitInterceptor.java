@@ -6,13 +6,17 @@ import com.tk.app.common.holder.DbHolder;
 import lombok.extern.slf4j.Slf4j;
 import lombok.val;
 import org.aspectj.lang.JoinPoint;
+import org.aspectj.lang.annotation.After;
 import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Before;
 import org.aspectj.lang.reflect.MethodSignature;
 import org.springframework.stereotype.Component;
 
 import java.lang.reflect.Method;
+import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 /**
  * @author tank198435163.com
@@ -51,6 +55,10 @@ public class DbSplitInterceptor {
 
   }
 
+  @After("@annotation(DbSelector)")
+  public void cleanThreadInfo() {
+    DbHolder.clean();
+  }
 
   @Comment(desc = "获取分库分表的字段值")
   @SuppressWarnings("unchecked")
@@ -74,9 +82,10 @@ public class DbSplitInterceptor {
       index = 0;
       Method method = null;
       Class<?>[] types = methodSignature.getParameterTypes();
+      List<String> targetMethods = targetFilterFieldNames();
       for (Class<?> clazzType : types) {
         for (Method declaredMethod : clazzType.getDeclaredMethods()) {
-          if ("getOrderId".equalsIgnoreCase(declaredMethod.getName())) {
+          if (targetMethods.contains(declaredMethod.getName())) {
             method = declaredMethod;
             existed = true;
             break;
@@ -99,6 +108,10 @@ public class DbSplitInterceptor {
 
 
     return Optional.empty();
+  }
+
+  private List<String> targetFilterFieldNames() {
+    return Stream.of("getOrderId", "getOrderNo", "getOrderNum").collect(Collectors.toList());
   }
 
   private int selectIndex(int orderId, int factor) {

@@ -11,7 +11,7 @@ import java.util.stream.IntStream;
  */
 public class DbHolder {
 
-  public static void determineDb(@NonNull final int dbIndex) {
+  public static void determineDb( @NonNull final Integer dbIndex) {
     dbSelector.set(String.valueOf(dbIndex));
   }
 
@@ -19,7 +19,7 @@ public class DbHolder {
     return Optional.ofNullable(dbSelector.get());
   }
 
-  public static void determineTable(@NonNull final int tableIndex) {
+  public static void determineTable(@NonNull final Integer tableIndex) {
     String tableSuffix = String.valueOf(tableIndex);
     StringBuilder strBuilder = new StringBuilder("tab_order_");
     String strZero = IntStream.range(0, 3 - tableSuffix.length()).boxed().map(i -> "0").collect(Collectors.joining());
@@ -32,6 +32,10 @@ public class DbHolder {
     return Optional.ofNullable(tableSelector.get());
   }
 
+  public static void clean() {
+    dbSelector.remove();
+    tableSelector.remove();
+  }
 
   private static final ThreadLocal<String> tableSelector = new ThreadLocal<>();
 
