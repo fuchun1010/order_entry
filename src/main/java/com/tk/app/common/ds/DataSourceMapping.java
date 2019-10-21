@@ -4,6 +4,7 @@ import com.google.common.collect.Maps;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
 
 import javax.sql.DataSource;
 import java.util.Map;
@@ -11,8 +12,8 @@ import java.util.Map;
 /**
  * @author tank198435163.com
  */
+@Configuration
 public class DataSourceMapping {
-
 
   @Bean("globalDataSource")
   public Map<Object, Object> registerDataSource() {
