@@ -15,8 +15,8 @@ public class DataSourceMapping {
 
 
   @Bean("globalDataSource")
-  public Map<String, DataSource> registerDataSource() {
-    Map<String, DataSource> maps = Maps.newHashMap();
+  public Map<Object, Object> registerDataSource() {
+    Map<Object, Object> maps = Maps.newHashMap();
     maps.putIfAbsent("default", this.publicDs);
     maps.putIfAbsent("orderDs0", this.orderDs0);
     maps.putIfAbsent("orderDs1", this.orderDs1);
