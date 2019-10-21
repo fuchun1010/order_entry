@@ -46,7 +46,7 @@ public class CostInterceptor {
         String result = Optional.ofNullable(annotation.annotationType().getDeclaredMethod("desc"))
             .flatMap(method -> {
               try {
-                return Optional.ofNullable((String) method.invoke(annotation, null));
+                return Optional.ofNullable((String) method.invoke(annotation, new Object[]{}));
               } catch (Exception e) {
                 return Optional.ofNullable(Constants.EMPTY_STR);
               }
