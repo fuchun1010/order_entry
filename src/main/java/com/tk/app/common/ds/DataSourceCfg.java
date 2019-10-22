@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.env.Environment;
+import org.springframework.jdbc.core.JdbcTemplate;
 
 import javax.sql.DataSource;
 import java.util.Map;
@@ -58,6 +59,12 @@ public class DataSourceCfg {
     return orderSourceRouter;
   }
 
+  @Bean
+  public JdbcTemplate initJdbcTemplate(@NonNull @Autowired final OrderSourceRouter orderSourceRouter) {
+    JdbcTemplate jdbcTemplate = new JdbcTemplate(orderSourceRouter);
+    return jdbcTemplate;
+  }
+
   private DataSource initDataSource(@NonNull final String url, @NonNull final Function<String, DataSource> fun) {
     return fun.apply(url);
   }
@@ -96,7 +103,6 @@ public class DataSourceCfg {
 
   @Autowired
   private Environment env;
-
 
   @Autowired
   @Qualifier("globalDataSource")
