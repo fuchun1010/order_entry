@@ -87,6 +87,11 @@ public class DataSourceCfg {
     ds.setTestOnReturn(false);
     ds.setPoolPreparedStatements(false);
     ds.setFilters("stat,wall");
+    ds.setTestWhileIdle(true);
+    ds.setTimeBetweenEvictionRunsMillis(6000);
+    ds.setKeepAlive(true);
+    ds.setMinIdle(1);
+    ds.setInitialSize(1);
     return ds;
   }
 

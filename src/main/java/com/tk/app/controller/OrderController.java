@@ -51,6 +51,7 @@ public class OrderController {
 
   @Comment(desc = "welcome")
   @GetMapping(path = WELCOME)
+  @DbSelector
   public ResponseEntity<ResponseBody> welcome() {
     ResponseBody responseBody = new ResponseBody();
     responseBody.add("desc", "welcome to Order entry");
