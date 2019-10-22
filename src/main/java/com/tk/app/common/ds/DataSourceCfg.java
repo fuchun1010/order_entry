@@ -72,9 +72,10 @@ public class DataSourceCfg {
     String password = env.getProperty(propKey("password"));
     int minIdle = env.getProperty(propKey("minIdle"), Integer.class);
     ds.setDriverClassName(driver);
+    ds.setUrl(url);
     ds.setUsername(username);
     ds.setPassword(password);
-    ds.setValidationQuery("select 1");
+    ds.setValidationQuery(env.getProperty(propKey("validationQuery")));
     ds.setMinIdle(minIdle);
     ds.setTestOnBorrow(false);
     ds.setTestOnReturn(false);

@@ -23,13 +23,14 @@ spring:
     username: root
     password: 123
     minIdle: 5
+    validationQuery: select 1
     public:
-      url: jdbc:mysql://localhost:3306/order_index_1
+      url: jdbc:mysql://localhost:3307/order_public
     ind_0:
-      url: jdbc:mysql://localhost:3306/order_index_1
+      url: jdbc:mysql://localhost:3307/order_index_0
     ind_1:
-      url: jdbc:mysql://localhost:3306/order_index_2
+      url: jdbc:mysql://localhost:3307/order_index_1
     ind_2:
-      url: jdbc:mysql://localhost:3306/order_index_3
+      url: jdbc:mysql://localhost:3307/order_index_2
     ind_3:
-      url: jdbc:mysql://localhost:3306/order_index_4
+      url: jdbc:mysql://localhost:3307/order_index_3

@@ -2,6 +2,7 @@ package com.tk.app.common.holder;
 
 import lombok.NonNull;
 
+import javax.sql.DataSource;
 import java.util.Optional;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
@@ -11,11 +12,11 @@ import java.util.stream.IntStream;
  */
 public class DbHolder {
 
-  public static void determineDb( @NonNull final Integer dbIndex) {
-    dbSelector.set(String.valueOf(dbIndex));
+  public static void determineDb( @NonNull final DataSource dataSource) {
+    dbSelector.set(dataSource);
   }
 
-  public static Optional<String> fetchSelectedDb() {
+  public static Optional<DataSource> fetchSelectedDb() {
     return Optional.ofNullable(dbSelector.get());
   }
 
@@ -39,5 +40,5 @@ public class DbHolder {
 
   private static final ThreadLocal<String> tableSelector = new ThreadLocal<>();
 
-  private static final ThreadLocal<String> dbSelector = new ThreadLocal<>();
+  private static final ThreadLocal<DataSource> dbSelector = new ThreadLocal<>();
 }

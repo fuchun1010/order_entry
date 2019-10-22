@@ -10,10 +10,14 @@ import org.aspectj.lang.annotation.After;
 import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Before;
 import org.aspectj.lang.reflect.MethodSignature;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
 
+import javax.sql.DataSource;
 import java.lang.reflect.Method;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -44,14 +48,21 @@ public class DbSplitInterceptor {
 
     String orderId = this.<String>fetchSplitFieldValue(joinPoint).orElse(Constants.EMPTY_STR);
     isContained = !orderId.equalsIgnoreCase(Constants.EMPTY_STR);
+    String dbKey = null;
     if (!isContained) {
-      throw new IllegalArgumentException("parameter orderId missed");
+      //throw new IllegalArgumentException("parameter orderId missed");
+      dbKey = "default";
+    } else {
+      int dbIndex = selectIndex(Integer.parseInt(orderId), 4);
+      dbKey = String.format("orderDs%s", dbIndex);
+      int tableIndex = selectIndex(Integer.parseInt(orderId), 128);
+      DbHolder.determineTable(tableIndex);
     }
 
-    int dbIndex = selectIndex(Integer.parseInt(orderId), 4);
-    int tableIndex = selectIndex(Integer.parseInt(orderId), 128);
-    DbHolder.determineDb(dbIndex);
-    DbHolder.determineTable(tableIndex);
+    DataSource targetDataSource = ((DataSource) globalDataSource.get(dbKey));
+
+    DbHolder.determineDb(targetDataSource);
+
 
   }
 
@@ -117,5 +128,9 @@ public class DbSplitInterceptor {
   private int selectIndex(int orderId, int factor) {
     return orderId & (factor - 1);
   }
+
+  @Autowired
+  @Qualifier("globalDataSource")
+  private Map<Object, Object> globalDataSource;
 
 }

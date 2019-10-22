@@ -9,7 +9,9 @@ import com.tk.app.message.OrderReq;
 import com.tk.app.message.mock.MockOrder;
 import com.tk.app.message.order.response.CreatedOrderRes;
 import lombok.NonNull;
+import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
+import lombok.val;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -58,11 +60,12 @@ public class OrderController {
   @Comment(desc = "mock test aop select db and mapped table with orderId")
   @PostMapping(path = MOCK_ORDER_CREATED)
   @DbSelector
+  @SneakyThrows
   public ResponseEntity<ResponseBody> pushOrder(@RequestBody @NonNull final MockOrder mockOrder) {
-    final String dbName = DbHolder.fetchSelectedDb().orElse(Constants.EMPTY_STR);
+    final val dbName = DbHolder.fetchSelectedDb();
     final String tableName = DbHolder.fetchSelectedTable().orElse(Constants.EMPTY_STR);
     ResponseBody responseBody = new ResponseBody();
-    responseBody.add("db", dbName);
+    responseBody.add("db", dbName.get().getConnection().getCatalog());
     responseBody.add("tableName", tableName);
     return ResponseEntity.ok(responseBody);
   }
