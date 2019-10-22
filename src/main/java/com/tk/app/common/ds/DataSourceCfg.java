@@ -58,7 +58,6 @@ public class DataSourceCfg {
     return orderSourceRouter;
   }
 
-
   private DataSource initDataSource(@NonNull final String url, @NonNull final Function<String, DataSource> fun) {
     return fun.apply(url);
   }
@@ -67,15 +66,15 @@ public class DataSourceCfg {
   @SneakyThrows
   private DataSource createDataSourceByUrl(@NonNull final String url) {
     DruidDataSource ds = new DruidDataSource();
-    String driver = env.getProperty(propKey("driver"));
-    String username = env.getProperty(propKey("username"));
-    String password = env.getProperty(propKey("password"));
-    int minIdle = env.getProperty(propKey("minIdle"), Integer.class);
+    String driver = propKey("driver");
+    String username = propKey("username");
+    String password = propKey("password");
+    int minIdle = propKey("minIdle", Integer.class);
     ds.setDriverClassName(driver);
     ds.setUrl(url);
     ds.setUsername(username);
     ds.setPassword(password);
-    ds.setValidationQuery(env.getProperty(propKey("validationQuery")));
+    ds.setValidationQuery(propKey("validationQuery"));
     ds.setMinIdle(minIdle);
     ds.setTestOnBorrow(false);
     ds.setTestOnReturn(false);
@@ -85,8 +84,13 @@ public class DataSourceCfg {
   }
 
   private String propKey(@NonNull final String name) {
+    return this.propKey(name, String.class);
+  }
+
+  private <T> T propKey(@NonNull final String name, Class<T> clazz) {
     StringBuilder sb = new StringBuilder("spring.dataSource.");
-    return sb.append(name).toString();
+    String key = sb.append(name).toString();
+    return this.env.getProperty(key, clazz);
   }
 
 
