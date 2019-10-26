@@ -1,5 +1,10 @@
 ## special introduction
 
+* wiki
+```text
+http://wiki.pagoda.com.cn/pages/viewpage.action?pageId=7646294
+```
+
 
 #### 创建普通pos订单
 ```shell
