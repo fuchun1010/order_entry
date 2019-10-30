@@ -64,6 +64,7 @@ public class RedisTest {
     config.useSingleServer().setAddress("redis://localhost:6379").setDatabase(3);
     try {
       RedissonRxClient client = Redisson.createRx(config);
+
       String value = client.getMap(key, StringCodec.INSTANCE).get("orderNo").cast(String.class).blockingGet(Constants.EMPTY_STR);
       System.out.println(value);
     } catch (Exception e) {

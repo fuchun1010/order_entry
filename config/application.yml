@@ -3,6 +3,7 @@ server:
   ip: 0.0.0.0
   max-threads: 300
   max-connections: 600
+  name: entry_01
 
 logging:
   level:

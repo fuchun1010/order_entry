@@ -7,8 +7,9 @@
 换货|用户买苹果,实际交易的是梨子,但是用户订单列表需要显示苹果|
 果切|果切编码是0001, 但是这个果品编码是对应的一个叫0002的, 用0001的重量系数 * 0002的重量|
 拼盘| 拼盘编码是0001, 下面有2个果品编码以及对应的系数,
-团购| `拼团购买数据结构没有想清楚`
-周期购 | `还没有想清楚`
+团购| 发起团购的订单超过1天没有拼团OK的，都删除，生产都废弃,如果有加入订单，达到上限以后，所有订单开始投递,有团长记录，应对可能的针对团长有特别折扣|
+周期购 | 一次性生产一个购买周期内的所有订单，但是只激活一个订单，其余订单要么放在数据库，定时加载到redis进行处理或者都放在redis处理，如果用户要取消就全部删除|
+心享| 发货机构可能是门店，可能是配送中心，可能都有
 
 ** **
 #### MySql表结构
@@ -23,7 +24,7 @@
 ----|------|----|-----|------|----|
 id | bigint unsigned  | Y | 主键 | 自动增长列|
 orderNo | bigint unsigned  | N | 订单编号|唯一索引列|
-orgCode | varchar(10) |N| 发货机构编码 |||
+enable|tinyint unsigned | 是否可以开始使用|默认都是可以使用的，除了周期购|
 
 
 > 订单子表
@@ -33,6 +34,7 @@ orgCode | varchar(10) |N| 发货机构编码 |||
 ----|------|----|-----|------|----|
 id | bigint unsigned | Y | 主键 | 自动增长列||
 orderNo | bigint unsigned  | N | 订单编号|唯一索引列||
+orgCode | varchar | N | 机构编号||
 parentOrderNo | bigint unsigned  | N | 父订单编号|btree索引,订单拆分 orderNo != parentOrderNo ||
 itemCode| varchar(10) | N  |果品编码 |这个需要去公共库匹配对应的名称|
 realItemCode |varchar(10) | N  |果品编码 |实际交易的果品编码,处理换购| - |
@@ -84,15 +86,20 @@ thirdBurden | int unsigned | N |第三方负担| | 0 |
       "desc":""
     }
   ],
-  "items":[
+  "orgCodes":[
     {
-      "itemCode":"",
-      "desc": "",
-      "imageUrl":"",
-      "unitPrice":"",
-      "weight":"",
-      "disCount":"19.0",
-      "status":"1"
+        "orgCode":"xxx",
+        "items":[
+            {
+              "itemCode":"",
+              "desc": "",
+              "imageUrl":"",
+              "unitPrice":"",
+              "weight":"",
+              "disCount":"19.0",
+              "status":"1"
+            }
+        ]
     }
   ],
   "suborders":"c:00001:o,c:00002:o",
@@ -175,8 +182,9 @@ c:xxx | 用户key,c:00001 | hash|customer:用户编号
 
 属性 | 值 | 业务含义|
 ----|----|--------|
-participation| 数字字符串| 不是拼团，参与人数，这个字段没有的|
 subOrders|O:0001|子单单号,如果有多个逗号分离|
+groupOrders|O:0002|这个字段不是组团订单的情况下不会有|
+isTeamer|默认0|只要不是团购单都是0,团购单是1|
 limit|数字类型字符串|购买限制|
 riderPhone|字符串|骑手电话|
 receiver|字符串|收货人地址|
