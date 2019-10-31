@@ -1,6 +1,11 @@
 package com.tk.app.common.ds;
 
 import lombok.Data;
+import lombok.NonNull;
+import org.testng.collections.Sets;
+
+import java.util.Objects;
+import java.util.Set;
 
 /**
  * "orderNo"
@@ -26,4 +31,13 @@ public class Order {
   String salesType;
   String createDate;
   String storeName;
+
+  Set<Item> items;
+
+  public void addItem(@NonNull final Item item) {
+    if (Objects.isNull(items)) {
+      items = Sets.newHashSet();
+    }
+    items.add(item);
+  }
 }
