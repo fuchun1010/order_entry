@@ -64,7 +64,6 @@ public class OrderTest {
     return rs;
   }
 
-
   private Optional<Order> needSplitUpIfNecessary(Collection<Order> orders, Item item, BiFunction<Collection<Order>, Item, Optional<Order>>... functions) {
 
     boolean isOk = true;
