@@ -82,20 +82,23 @@ public class OrderTest {
 
   private Optional<Order> isEqualGroup(final Collection<Order> orders, final Item item) {
 
-
-    for (Order order : orders) {
-      boolean isOk = order.getItems().stream().map(Item::getRepository).filter(item.getRepository()::equals).count() > 0;
-      if (isOk) {
-        return Optional.of(order);
-      }
-    }
-
-    return Optional.empty();
+    return this.isEqualLogical(orders, item, (order, newItem) -> order.getItems()
+        .stream()
+        .map(Item::getRepository).filter(item.getRepository()::equals).count() > 0
+    );
   }
 
   private Optional<Order> isEqualDispatch(final Collection<Order> orders, final Item item) {
+    return this.isEqualLogical(
+        orders,
+        item,
+        (order, newItem) -> order.getItems().stream().map(Item::getDispatchDate).filter(item.getDispatchDate()::equals).count() > 0
+    );
+  }
+
+  private Optional<Order> isEqualLogical(final Collection<Order> orders, final Item item, BiFunction<Order, Item, Boolean> logical) {
     for (Order order : orders) {
-      boolean isOk = order.getItems().stream().map(Item::getDispatchDate).filter(item.getDispatchDate()::equals).count() > 0;
+      boolean isOk = logical.apply(order, item);
       if (isOk) {
         return Optional.of(order);
       }
