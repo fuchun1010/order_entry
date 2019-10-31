@@ -18,6 +18,8 @@ public class Item {
 
   private String desc;
 
+  private String dispatchDate;
+
   @Override
   public boolean equals(Object o) {
     if (this == o) return true;

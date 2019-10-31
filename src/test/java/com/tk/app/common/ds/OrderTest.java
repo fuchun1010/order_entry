@@ -1,19 +1,24 @@
 package com.tk.app.common.ds;
 
-import lombok.NonNull;
 import org.junit.Test;
-import org.testng.collections.Lists;
+import org.testng.collections.Maps;
 
+import java.util.Collection;
 import java.util.List;
+import java.util.Map;
+import java.util.Optional;
 import java.util.concurrent.atomic.AtomicLong;
+import java.util.function.BiFunction;
+import java.util.stream.Collectors;
 
 public class OrderTest {
 
   @Test
   public void testSplitOrder() {
-    Item item_01 = new Item().setItemCode("100041").setDesc("apple_01").setRepository("A");
-    Item item_02 = new Item().setItemCode("100042").setDesc("apple_02").setRepository("B");
-    Item item_03 = new Item().setItemCode("100043").setDesc("apple_03").setRepository("B");
+    Item item_01 = new Item().setItemCode("100041").setDesc("apple_01").setRepository("A").setDispatchDate("2019-12-11");
+    Item item_02 = new Item().setItemCode("100042").setDesc("apple_02").setRepository("B").setDispatchDate("2019-10-31");
+    Item item_03 = new Item().setItemCode("100043").setDesc("apple_03").setRepository("B").setDispatchDate("2019-10-31");
+    Item item_04 = new Item().setItemCode("100044").setDesc("apple_04").setRepository("B").setDispatchDate("2019-11-11");
 
     Order primaryOrder = new Order();
     primaryOrder.setOrderNo(String.valueOf(this.id.incrementAndGet()));
@@ -24,32 +29,79 @@ public class OrderTest {
     primaryOrder.addItem(item_01);
     primaryOrder.addItem(item_02);
     primaryOrder.addItem(item_03);
+    primaryOrder.addItem(item_04);
 
-
-    List<Order> orders = this.splitOrder(primaryOrder);
-    System.out.println(orders);
+    List<Order> orders = this.splitOrder(primaryOrder).values().stream().collect(Collectors.toList());
+    System.out.println(orders.size());
   }
 
-  private List<Order> splitOrder(final Order primaryOrder) {
-    List<Order> rs = Lists.newArrayList(32);
-    this.splitOrder(primaryOrder, rs);
+  private Map<Long, Order> splitOrder(final Order primaryOrder) {
+    Map<Long, Order> rs = Maps.newHashMap();
+    Order order = new Order();
+    for (Item item : primaryOrder.getItems()) {
+      if (rs.isEmpty()) {
+        Long id = this.id.incrementAndGet();
+        order.setOrderNo(String.valueOf(id));
+        order.addItem(item);
+        rs.put(id, order);
+      } else {
+        Collection<Order> orders = rs.values();
+        Optional<Order> targetOpt = this.needSplitUpIfNecessary(orders, item,
+            this::isEqualGroup,
+            this::isEqualDispatch);
+        if (targetOpt.isPresent()) {
+          targetOpt.get().addItem(item);
+        } else {
+          Long id = this.id.incrementAndGet();
+          order = new Order();
+          order.setOrderNo(String.valueOf(id));
+          order.addItem(item);
+          rs.put(id, order);
+        }
+
+      }
+    }
     return rs;
   }
 
-  private void splitOrder(@NonNull final Order primaryOrder, @NonNull final List<Order> orders) {
-    Order order = new Order();
-    order.setOrderNo(String.valueOf(this.id.incrementAndGet()));
-    for (Item item : primaryOrder.items) {
-      boolean isOk = false;
-      if (isOk) {
-        //TODO 没有调试
-        this.splitOrder(order, orders);
-      } else {
-        order.addItem(item);
+
+  private Optional<Order> needSplitUpIfNecessary(Collection<Order> orders, Item item, BiFunction<Collection<Order>, Item, Optional<Order>>... functions) {
+
+    boolean isOk = true;
+    Optional<Order> targetOpt = Optional.empty();
+    for (BiFunction<Collection<Order>, Item, Optional<Order>> fun : functions) {
+      targetOpt = fun.apply(orders, item);
+      isOk &= targetOpt.isPresent();
+      if (!isOk) {
+        break;
       }
     }
-    orders.add(order);
 
+    return !isOk ? Optional.empty() : targetOpt;
+  }
+
+  private Optional<Order> isEqualGroup(final Collection<Order> orders, final Item item) {
+
+
+    for (Order order : orders) {
+      boolean isOk = order.getItems().stream().map(Item::getRepository).filter(item.getRepository()::equals).count() > 0;
+      if (isOk) {
+        return Optional.of(order);
+      }
+    }
+
+    return Optional.empty();
+  }
+
+  private Optional<Order> isEqualDispatch(final Collection<Order> orders, final Item item) {
+    for (Order order : orders) {
+      boolean isOk = order.getItems().stream().map(Item::getDispatchDate).filter(item.getDispatchDate()::equals).count() > 0;
+      if (isOk) {
+        return Optional.of(order);
+      }
+    }
+
+    return Optional.empty();
   }
 
   private AtomicLong id = new AtomicLong(0L);

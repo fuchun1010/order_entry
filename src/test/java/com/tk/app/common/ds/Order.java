@@ -31,8 +31,9 @@ public class Order {
   String salesType;
   String createDate;
   String storeName;
+  String dispatchDate;
 
-  Set<Item> items;
+  Set<Item> items = Sets.newHashSet();
 
   public void addItem(@NonNull final Item item) {
     if (Objects.isNull(items)) {
