@@ -22,6 +22,11 @@
         <lombok-version>1.18.8</lombok-version>
         <guava-version>23.0</guava-version>
         <mysql-version>8.0.16</mysql-version>
+        <druid-version>1.1.10</druid-version>
+        <redisson-version>3.11.5</redisson-version>
+        <react-version>1.0.3</react-version>
+        <rocketmq-version>4.5.1</rocketmq-version>
+        <commons-codes-version>1.13</commons-codes-version>
     </properties>
 
     <dependencies>
@@ -57,7 +62,7 @@
         <dependency>
             <groupId>com.alibaba</groupId>
             <artifactId>druid-spring-boot-starter</artifactId>
-            <version>1.1.10</version>
+            <version>${druid-version}</version>
         </dependency>
 
         <dependency>
@@ -87,30 +92,36 @@
         <dependency>
             <groupId>org.redisson</groupId>
             <artifactId>redisson</artifactId>
-            <version>3.11.5</version>
+            <version>${redisson-version}</version>
         </dependency>
 
         <dependency>
             <groupId>org.reactivestreams</groupId>
             <artifactId>reactive-streams</artifactId>
-            <version>1.0.3</version>
+            <version>${react-version}</version>
         </dependency>
 
         <dependency>
             <groupId>org.reactivestreams</groupId>
             <artifactId>reactive-streams-tck</artifactId>
-            <version>1.0.3</version>
+            <version>${react-version}</version>
         </dependency>
         <dependency>
             <groupId>org.reactivestreams</groupId>
             <artifactId>reactive-streams-tck-flow</artifactId>
-            <version>1.0.3</version>
+            <version>${react-version}</version>
         </dependency>
 
         <dependency>
             <groupId>commons-codec</groupId>
             <artifactId>commons-codec</artifactId>
-            <version>1.13</version>
+            <version>${commons-codes-version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.apache.rocketmq</groupId>
+            <artifactId>rocketmq-client</artifactId>
+            <version>${rocketmq-version}</version>
         </dependency>
 
 
