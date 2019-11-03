@@ -35,3 +35,11 @@ spring:
       url: jdbc:mysql://localhost:3307/order_index_2
     ind_3:
       url: jdbc:mysql://localhost:3307/order_index_3
+
+mq:
+  rocketmq:
+    group: demo
+    nameSvr: localhost:9876
+    orderTopic:
+      topic: orderTopic
+

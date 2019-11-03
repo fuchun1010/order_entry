@@ -2,6 +2,8 @@ package com.tk.app.init;
 
 import com.tk.app.common.Comment;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.rocketmq.client.exception.MQClientException;
+import org.apache.rocketmq.client.producer.DefaultMQProducer;
 import org.redisson.Redisson;
 import org.redisson.api.RLock;
 import org.redisson.api.RedissonClient;
@@ -31,7 +33,6 @@ public class RedisCfg {
     return (args) -> {
       String key = "__keyevent@3__:expired";
       String name = this.environment.getProperty("server.name");
-
       redisClient.getTopic(key).addListener(String.class, (channel, msg) -> {
         RLock lock = redisClient.getLock(name);
         boolean fetched = false;
@@ -51,6 +52,8 @@ public class RedisCfg {
         }
 
       });
+      //TODO add rocket mq consumer listener
+
     };
   }
 
@@ -64,10 +67,33 @@ public class RedisCfg {
     return client;
   }
 
+  @Bean
+  public DefaultMQProducer initProducer() {
+    String group = this.mqConfig.getGroup();
+    DefaultMQProducer producer = new DefaultMQProducer(group);
+    producer.setNamesrvAddr(this.mqConfig.getNameSvr());
+    try {
+      producer.start();
+      log.info("rocketMq发送端启动成功");
+    } catch (MQClientException e) {
+      log.error("rocket mq producer init error:[{}]", e.getErrorMessage());
+    }
+
+    return producer;
+
+  }
+
+  private void startOrderTopicConsumer() {
+
+  }
+
   @Autowired
   private RedissonClient redisClient;
 
   @Autowired
   private Environment environment;
+
+  @Autowired
+  private MqConfig mqConfig;
 
 }
