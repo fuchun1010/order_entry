@@ -16,4 +16,7 @@ public interface UrlPattern {
   String WELCOME = "/order/welcome";
 
   String MOCK_ORDER_CREATED = "/order/mock/order/created";
+
+
+  String TRADE_CREATED = "/order/mock/trade/created";
 }
