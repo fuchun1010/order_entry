@@ -2,8 +2,13 @@ package com.tk.app.init;
 
 import com.tk.app.common.Comment;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.rocketmq.client.consumer.DefaultMQPushConsumer;
+import org.apache.rocketmq.client.consumer.listener.ConsumeConcurrentlyContext;
+import org.apache.rocketmq.client.consumer.listener.ConsumeConcurrentlyStatus;
+import org.apache.rocketmq.client.consumer.listener.MessageListenerConcurrently;
 import org.apache.rocketmq.client.exception.MQClientException;
 import org.apache.rocketmq.client.producer.DefaultMQProducer;
+import org.apache.rocketmq.common.message.MessageExt;
 import org.redisson.Redisson;
 import org.redisson.api.RLock;
 import org.redisson.api.RedissonClient;
@@ -15,6 +20,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.env.Environment;
 
+import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 
@@ -52,7 +58,7 @@ public class RedisCfg {
         }
 
       });
-      //TODO add rocket mq consumer listener
+      this.startOrderTopicConsumer();
 
     };
   }
@@ -83,8 +89,35 @@ public class RedisCfg {
 
   }
 
-  private void startOrderTopicConsumer() {
+  @Bean
+  public DefaultMQPushConsumer initConsumer() {
+    String consumerGroup = this.mqConfig.getConsumerGroup();
+    String nameSvr = this.mqConfig.getNameSvr();
+    DefaultMQPushConsumer consumer = new DefaultMQPushConsumer(consumerGroup);
+    consumer.setNamesrvAddr(nameSvr);
+    try {
+      consumer.subscribe("orderTopic", "*");
+    } catch (MQClientException e) {
+      e.printStackTrace();
+    }
+    return consumer;
 
+  }
+
+  private void startOrderTopicConsumer() {
+    this.orderConsumer.registerMessageListener(new MessageListenerConcurrently() {
+      @Override
+      public ConsumeConcurrentlyStatus consumeMessage(List<MessageExt> list, ConsumeConcurrentlyContext consumeConcurrentlyContext) {
+        log.info("order topic consumer 收到消息了");
+        return ConsumeConcurrentlyStatus.CONSUME_SUCCESS;
+      }
+    });
+    try {
+      this.orderConsumer.start();
+      log.info("order topic 消费者启动成功,开始监听");
+    } catch (MQClientException e) {
+      log.error("order topic consumer error:[{}]", e.getErrorMessage());
+    }
   }
 
   @Autowired
@@ -95,5 +128,8 @@ public class RedisCfg {
 
   @Autowired
   private MqConfig mqConfig;
+
+  @Autowired
+  private DefaultMQPushConsumer orderConsumer;
 
 }

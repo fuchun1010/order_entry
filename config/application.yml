@@ -42,4 +42,5 @@ mq:
     nameSvr: localhost:9876
     orderTopic:
       topic: orderTopic
+    consumerGroup: demo-consumer
 

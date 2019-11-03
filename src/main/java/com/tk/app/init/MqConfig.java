@@ -16,4 +16,6 @@ public class MqConfig {
 
   private String nameSvr;
 
+  private String consumerGroup;
+
 }
