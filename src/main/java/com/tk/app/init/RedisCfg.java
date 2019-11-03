@@ -108,7 +108,11 @@ public class RedisCfg {
     this.orderConsumer.registerMessageListener(new MessageListenerConcurrently() {
       @Override
       public ConsumeConcurrentlyStatus consumeMessage(List<MessageExt> list, ConsumeConcurrentlyContext consumeConcurrentlyContext) {
-        log.info("order topic consumer 收到消息了");
+        if (list.size() > 0) {
+          MessageExt msg = list.get(0);
+          String body = new String(msg.getBody());
+          log.info("order topic consumer 收到消息了, tag:[{}] 消息体:[{}]", msg.getTags(), body);
+        }
         return ConsumeConcurrentlyStatus.CONSUME_SUCCESS;
       }
     });
