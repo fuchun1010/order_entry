@@ -1,13 +1,16 @@
 package com.tk.app.common.ds;
 
 import com.alibaba.druid.pool.DruidDataSource;
+import com.tk.app.common.holder.DbHolder;
 import lombok.NonNull;
 import lombok.SneakyThrows;
+import org.mybatis.spring.SqlSessionFactoryBean;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.env.Environment;
+import org.springframework.core.io.support.PathMatchingResourcePatternResolver;
 import org.springframework.jdbc.core.JdbcTemplate;
 
 import javax.sql.DataSource;
@@ -19,6 +22,14 @@ import java.util.function.Function;
  */
 @Configuration
 public class DataSourceCfg {
+
+  @Bean
+  public SqlSessionFactoryBean initSqlSessionFactoryBean(@Autowired OrderSourceRouter dataSource) {
+    SqlSessionFactoryBean sqlSessionFactoryBean = new SqlSessionFactoryBean();
+    sqlSessionFactoryBean.setDataSource(dataSource);
+    sqlSessionFactoryBean.setMapperLocations(new PathMatchingResourcePatternResolver().getResource("classpath:mapper/Address.xml"));
+    return sqlSessionFactoryBean;
+  }
 
 
   @Bean("publicDs")
@@ -55,7 +66,8 @@ public class DataSourceCfg {
   public OrderSourceRouter initOrderSourceRouter() {
     OrderSourceRouter orderSourceRouter = new OrderSourceRouter();
     orderSourceRouter.setTargetDataSources(this.globalDataSource);
-    orderSourceRouter.setDefaultTargetDataSource(this.orderPublicDataSource());
+    orderSourceRouter.setDefaultTargetDataSource(this.globalDataSource.get("default"));
+    DbHolder.determineDb(this.orderPublicDataSource());
     return orderSourceRouter;
   }
 
