@@ -9,6 +9,6 @@ import org.springframework.jdbc.datasource.lookup.AbstractRoutingDataSource;
 public class OrderSourceRouter extends AbstractRoutingDataSource {
   @Override
   protected Object determineCurrentLookupKey() {
-    return DbHolder.fetchSelectedDb();
+    return DbHolder.fetchSelectedDb().get();
   }
 }
