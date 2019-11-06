@@ -13,6 +13,7 @@ import org.springframework.core.env.Environment;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.support.PathMatchingResourcePatternResolver;
 import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.jdbc.datasource.DataSourceTransactionManager;
 
 import javax.sql.DataSource;
 import java.util.Map;
@@ -78,6 +79,27 @@ public class DataSourceCfg {
     JdbcTemplate jdbcTemplate = new JdbcTemplate(orderSourceRouter);
     return jdbcTemplate;
   }
+
+  @Bean("publicTrans")
+  public DataSourceTransactionManager initPublicDataSource(@Autowired @Qualifier("publicDs") DataSource dataSource) {
+    return new DataSourceTransactionManager(dataSource);
+  }
+
+  @Bean("orderDs0")
+  public DataSourceTransactionManager initOrderInd0DataSource(@Autowired @Qualifier("orderDs0") DataSource dataSource) {
+    return new DataSourceTransactionManager(dataSource);
+  }
+
+  @Bean("orderDs1")
+  public DataSourceTransactionManager initOrderInd1DataSource(@Autowired @Qualifier("orderDs1") DataSource dataSource) {
+    return new DataSourceTransactionManager(dataSource);
+  }
+
+  @Bean("orderDs2")
+  public DataSourceTransactionManager initOrderInd2DataSource(@Autowired @Qualifier("orderDs2") DataSource dataSource) {
+    return new DataSourceTransactionManager(dataSource);
+  }
+
 
   private DataSource initDataSource(@NonNull final String url, @NonNull final Function<String, DataSource> fun) {
     return fun.apply(url);
