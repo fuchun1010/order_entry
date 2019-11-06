@@ -1,6 +1,6 @@
 package com.tk.app.mapper;
 
-import com.tk.app.common.interceptor.DbSelector;
+import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,11 +12,11 @@ import org.springframework.test.context.junit4.SpringRunner;
 public class AddressTest {
 
   @Test
-  @DbSelector
   public void find() {
-    this.address.find();
+    int rs = this.address.find();
+    Assert.assertTrue(new Integer(rs).compareTo(1) == 0);
   }
 
   @Autowired
-  private Address address;
+  private IAddress address;
 }

@@ -28,7 +28,7 @@ public class DataSourceCfg {
   public SqlSessionFactoryBean initSqlSessionFactoryBean(@Autowired OrderSourceRouter dataSource) {
     SqlSessionFactoryBean sqlSessionFactoryBean = new SqlSessionFactoryBean();
     sqlSessionFactoryBean.setDataSource(dataSource);
-    Resource addressResource = new PathMatchingResourcePatternResolver().getResource("classpath:mapper/Address.xml");
+    Resource addressResource = new PathMatchingResourcePatternResolver().getResource("classpath:mapper/IAddress.xml");
     sqlSessionFactoryBean.setMapperLocations(addressResource);
     return sqlSessionFactoryBean;
   }
