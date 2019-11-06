@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.env.Environment;
+import org.springframework.core.io.Resource;
 import org.springframework.core.io.support.PathMatchingResourcePatternResolver;
 import org.springframework.jdbc.core.JdbcTemplate;
 
@@ -27,7 +28,8 @@ public class DataSourceCfg {
   public SqlSessionFactoryBean initSqlSessionFactoryBean(@Autowired OrderSourceRouter dataSource) {
     SqlSessionFactoryBean sqlSessionFactoryBean = new SqlSessionFactoryBean();
     sqlSessionFactoryBean.setDataSource(dataSource);
-    sqlSessionFactoryBean.setMapperLocations(new PathMatchingResourcePatternResolver().getResource("classpath:mapper/Address.xml"));
+    Resource addressResource = new PathMatchingResourcePatternResolver().getResource("classpath:mapper/Address.xml");
+    sqlSessionFactoryBean.setMapperLocations(addressResource);
     return sqlSessionFactoryBean;
   }
 
