@@ -66,7 +66,7 @@ public class OrderController {
     final val dbName = DbHolder.fetchSelectedDb();
     final String tableName = DbHolder.fetchSelectedTable().orElse(Constants.EMPTY_STR);
     ResponseBody responseBody = new ResponseBody();
-    responseBody.add("db", dbName.get().getConnection().getCatalog());
+    responseBody.add("db", dbName);
     responseBody.add("tableName", tableName);
     return ResponseEntity.ok(responseBody);
   }

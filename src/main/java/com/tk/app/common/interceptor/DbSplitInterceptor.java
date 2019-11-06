@@ -16,6 +16,7 @@ import org.springframework.stereotype.Component;
 
 import javax.sql.DataSource;
 import java.lang.reflect.Method;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -55,14 +56,30 @@ public class DbSplitInterceptor {
     } else {
       int dbIndex = selectIndex(Integer.parseInt(orderId), 4);
       dbKey = String.format("orderDs%s", dbIndex);
+
       int tableIndex = selectIndex(Integer.parseInt(orderId), 128);
       DbHolder.determineTable(tableIndex);
     }
-
+    log.info("选择的数据库是:[{}],表是:[{}]", dbKey, DbHolder.fetchSelectedTable().orElse(Constants.EMPTY_STR));
     DataSource targetDataSource = ((DataSource) globalDataSource.get(dbKey));
-
-    DbHolder.determineDb(targetDataSource);
-
+    try {
+      //TODO 变量方法看谁有setTableName这个方法,目前直接处理,没有便利
+//      Method method = values[0].getClass().getDeclaredMethod("setTableName", new Class[]{});
+//      if (method != null) {
+//        method.invoke(values[0], DbHolder.fetchSelectedTable().orElse(Constants.EMPTY_STR));
+//      }
+      Arrays.stream(values[0].getClass().getDeclaredMethods())
+          .filter(m -> "setTableName".equalsIgnoreCase(m.getName())).findFirst().ifPresent(method -> {
+        try {
+          method.invoke(values[0], DbHolder.fetchSelectedTable().orElse(Constants.EMPTY_STR));
+        } catch (Exception e) {
+          e.printStackTrace();
+        }
+      });
+    } catch (Exception e) {
+      e.printStackTrace();
+    }
+    DbHolder.determineDb(dbKey);
 
   }
 

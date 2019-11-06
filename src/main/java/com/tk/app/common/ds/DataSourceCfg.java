@@ -70,7 +70,7 @@ public class DataSourceCfg {
     OrderSourceRouter orderSourceRouter = new OrderSourceRouter();
     orderSourceRouter.setTargetDataSources(this.globalDataSource);
     orderSourceRouter.setDefaultTargetDataSource(this.globalDataSource.get("default"));
-    DbHolder.determineDb(this.orderPublicDataSource());
+    DbHolder.determineDb("default");
     return orderSourceRouter;
   }
 

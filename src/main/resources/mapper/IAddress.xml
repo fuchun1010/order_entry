@@ -7,4 +7,10 @@
         select count(*) as cnt from tab_order_payments
     </select>
 
+    <select id="add" resultType="int" parameterType="com.tk.app.domain.Address">
+
+        insert into ${tableName} (orderNo,address) values(#{orderNo}, #{address})
+
+    </select>
+
 </mapper>
