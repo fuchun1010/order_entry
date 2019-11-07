@@ -8,6 +8,7 @@ import org.apache.rocketmq.client.consumer.listener.ConsumeConcurrentlyStatus;
 import org.apache.rocketmq.client.consumer.listener.MessageListenerConcurrently;
 import org.apache.rocketmq.client.exception.MQClientException;
 import org.apache.rocketmq.client.producer.DefaultMQProducer;
+import org.apache.rocketmq.client.producer.TransactionMQProducer;
 import org.apache.rocketmq.common.message.MessageExt;
 import org.redisson.Redisson;
 import org.redisson.api.RLock;
@@ -18,6 +19,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Primary;
 import org.springframework.core.env.Environment;
 
 import java.util.List;
@@ -74,6 +76,7 @@ public class RedisCfg {
   }
 
   @Bean
+  @Primary
   public DefaultMQProducer initProducer() {
     String group = this.mqConfig.getGroup();
     DefaultMQProducer producer = new DefaultMQProducer(group);
@@ -84,9 +87,14 @@ public class RedisCfg {
     } catch (MQClientException e) {
       log.error("rocket mq producer init error:[{}]", e.getErrorMessage());
     }
-
     return producer;
+  }
 
+  @Bean("transProducer")
+  public TransactionMQProducer initTransactionProducer() {
+    TransactionMQProducer producer = new TransactionMQProducer("tranGroup1");
+    producer.setNamesrvAddr(this.mqConfig.getNameSvr());
+    return producer;
   }
 
   @Bean

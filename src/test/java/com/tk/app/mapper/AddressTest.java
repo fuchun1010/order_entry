@@ -24,7 +24,7 @@ public class AddressTest {
     Address receiverAdd = new Address();
     receiverAdd.setOrderNo(String.valueOf(1234567));
     receiverAdd.setAddress("深圳市南山区留创");
-
+    receiverAdd.addField("orderNo").addField("address");
     this.address.add(receiverAdd);
   }
 

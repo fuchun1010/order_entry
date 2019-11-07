@@ -7,10 +7,15 @@
         select count(*) as cnt from tab_order_payments
     </select>
 
-    <select id="add" resultType="int" parameterType="com.tk.app.domain.Address">
+    <insert id="add" parameterType="com.tk.app.domain.Address">
 
-        insert into ${tableName} (orderNo,address) values(#{orderNo}, #{address})
+        insert into ${tableName}
+        <foreach collection="fields" item="field" open="(" close=")" separator=",">
+            ${field}
+        </foreach>
 
-    </select>
+        values(#{orderNo}, #{address})
+
+    </insert>
 
 </mapper>
