@@ -24,6 +24,12 @@ public class TradeOrder {
   @Comment(desc = "订单编号")
   private Long orderNo;
 
+  @Comment(desc = "品牌")
+  private OrderBrand brand;
+
+  @Comment(desc = "订单类型")
+  private OrderType orderType;
+
   @Comment(desc = "创建日期")
   private String createDate;
 
@@ -45,8 +51,11 @@ public class TradeOrder {
   @Comment(desc = "订单活动")
   private Set<Activity> activities = Sets.newHashSet();
 
-  @Comment(desc = "订货结构")
+  @Comment(desc = "收货地址")
   private ReceiverAddress receiverAddress;
+
+  @Comment(desc = "是否需要开具发票")
+  private RequiredInvoice requiredInvoice;
 
   @SneakyThrows
   public synchronized boolean addActivity(@NonNull final Activity activity) {

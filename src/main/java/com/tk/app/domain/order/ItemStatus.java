@@ -9,9 +9,9 @@ import com.tk.app.common.Comment;
 public enum ItemStatus {
 
   CANCEL(0, "取消"),
-  NORMAL(1, "正常"),
-  EXCHANGE(2, "换货"),
-  REFUND(3, "退货");
+  NORMAL(100, "正常"),
+  EXCHANGE(200, "换货"),
+  REFUND(300, "退货");
 
   ItemStatus(int value, String desc) {
     this.value = value;
