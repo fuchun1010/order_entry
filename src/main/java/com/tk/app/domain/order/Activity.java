@@ -31,8 +31,8 @@ public class Activity {
   @Comment(desc = "活动的目标对象，目标对象可以是订单，取消，用户，果品")
   private String targetCode;
 
-  @Comment(desc = "活动内别")
-  private ActivityType activityType;
+  @Comment(desc = "活动类型")
+  private Integer activityType;
 
   @Override
   public boolean equals(Object o) {

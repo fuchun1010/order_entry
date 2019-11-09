@@ -54,7 +54,7 @@ public class Payment {
   private String payDateTime;
 
   @Comment(desc = "支付金额,这个地方用string=>double=>BigDecimal")
-  private String money;
+  private Integer money;
 
   @Comment(desc = "支付类别")
   private String type;
