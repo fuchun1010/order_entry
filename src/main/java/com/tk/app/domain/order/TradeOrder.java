@@ -78,6 +78,9 @@ public class TradeOrder {
   @Comment(desc = "是否使用积分,默认不使用")
   private Short usedScore = 0;
 
+  @Comment(desc = "销售类型")
+  private SalesType salesType;
+
   @JsonIgnore
   @SneakyThrows
   @Comment(desc = "添加活动")
