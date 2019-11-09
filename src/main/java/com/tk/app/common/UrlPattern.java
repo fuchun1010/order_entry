@@ -17,6 +17,8 @@ public interface UrlPattern {
 
   String MOCK_ORDER_CREATED = "/order/mock/order/created";
 
-
   String TRADE_CREATED = "/order/mock/trade/created";
+
+  String CONFIRM_ORDER = "/order/mock/confirm";
+
 }

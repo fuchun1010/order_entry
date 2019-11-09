@@ -30,4 +30,7 @@ public class ReceiverAddress {
   @Comment(desc = "昵称")
   private String nickName;
 
+  @Comment(desc = "收货地址（自提单为门店ID")
+  private Integer receiveAddrID;
+
 }

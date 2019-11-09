@@ -1,14 +1,15 @@
 package com.tk.app.common;
 
+import com.annimon.stream.Optional;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.NonNull;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.text.StringEscapeUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.io.IOException;
-import java.util.Optional;
 
 /**
  * @author tank198435163.com
@@ -30,7 +31,10 @@ public class JsonUtil {
 
   public <T> Optional<T> toObject(@NonNull String jsonStr, Class<T> clazz) {
     try {
-      T obj = this.jsonMapper.readValue(jsonStr.getBytes(), clazz);
+
+      String xx = StringEscapeUtils.unescapeJson(jsonStr);
+      String value = new String(xx.getBytes(), "UTF-8");
+      T obj = this.jsonMapper.readValue(value.getBytes(), clazz);
       return Optional.ofNullable(obj);
     } catch (IOException e) {
       log.error("将json字符串转成对象异常:[{}]", e.getMessage());

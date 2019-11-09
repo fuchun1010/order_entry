@@ -9,6 +9,7 @@ import lombok.SneakyThrows;
 import org.testng.collections.Sets;
 
 import java.util.Objects;
+import java.util.Optional;
 import java.util.Set;
 
 /**
@@ -57,9 +58,25 @@ public class TradeOrder {
   @Comment(desc = "是否需要开具发票")
   private RequiredInvoice requiredInvoice;
 
+  @Comment(desc = "订单备注")
+  private String remark;
+
+  @Comment(desc = "配送开始时间,原始单据不要,拆单以后需要这个属性")
+  private String dispatchStartDate = "2018-06-01";
+
+  @Comment(desc = "配送结束时间,原始单据不要,拆单以后需要这个属性")
+  private String dispatchEndDate = "2018-06-01";
+
+  @Comment(desc = "单据是否团购")
+  private OrderComposed orderComposed = new NormalOrderComposed();
+
+  @Comment(desc = "骑行配送距离（订单类型为自提单时，配送距离为0，app为必填项，小程序拼团非必填）")
+  private Optional<String> dispatchDistance = Optional.empty();
+
   @SneakyThrows
   public synchronized boolean addActivity(@NonNull final Activity activity) {
-    return CollectionAction.addElement(this.activities,
+    return CollectionAction.addElement(
+        this.activities,
         String.valueOf(this.orderNo),
         activity,
         element -> Stream.of(
